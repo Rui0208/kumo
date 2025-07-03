@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { fadeIn, scaleIn } from "@/lib/animations"
+import { useClientSide } from "@/lib/hooks"
 
 interface IntroScreenProps {
   onComplete: () => void
@@ -10,15 +11,23 @@ interface IntroScreenProps {
 
 export default function IntroScreen({ onComplete }: IntroScreenProps) {
   const [isVisible, setIsVisible] = useState(true)
+  const isClient = useClientSide()
 
   useEffect(() => {
+    if (!isClient) return
+
     const timer = setTimeout(() => {
       setIsVisible(false)
       setTimeout(onComplete, 1000) // 等待淡出動畫完成後觸發 onComplete
     }, 3000)
 
     return () => clearTimeout(timer)
-  }, [onComplete])
+  }, [onComplete, isClient])
+
+  // 在客戶端渲染之前不顯示任何內容，避免 hydration mismatch
+  if (!isClient) {
+    return null
+  }
 
   return (
     <AnimatePresence>
@@ -29,6 +38,7 @@ export default function IntroScreen({ onComplete }: IntroScreenProps) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.8, ease: "easeInOut" }}
+          suppressHydrationWarning
         >
           <div className="text-center">
             {/* 品牌 Logo/名稱 */}
