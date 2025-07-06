@@ -16,13 +16,32 @@ export default function IntroScreen({ onComplete }: IntroScreenProps) {
   useEffect(() => {
     if (!isClient) return
 
+    // 在 intro 期間禁止頁面滾動
+    if (isVisible) {
+      document.body.style.overflow = 'hidden'
+      document.body.style.height = '100vh'
+    } else {
+      document.body.style.overflow = 'auto'
+      document.body.style.height = 'auto'
+    }
+
     const timer = setTimeout(() => {
       setIsVisible(false)
-      setTimeout(onComplete, 1000) // 等待淡出動畫完成後觸發 onComplete
+      setTimeout(() => {
+        // 恢復頁面滾動
+        document.body.style.overflow = 'auto'
+        document.body.style.height = 'auto'
+        onComplete()
+      }, 1000) // 等待淡出動畫完成後觸發 onComplete
     }, 3000)
 
-    return () => clearTimeout(timer)
-  }, [onComplete, isClient])
+    return () => {
+      clearTimeout(timer)
+      // 清理時恢復滾動
+      document.body.style.overflow = 'auto'
+      document.body.style.height = 'auto'
+    }
+  }, [onComplete, isClient, isVisible])
 
   // 在客戶端渲染之前不顯示任何內容，避免 hydration mismatch
   if (!isClient) {
@@ -33,7 +52,7 @@ export default function IntroScreen({ onComplete }: IntroScreenProps) {
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-[#EAE8E4]"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-[#EAE8E4] w-screen h-screen"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}

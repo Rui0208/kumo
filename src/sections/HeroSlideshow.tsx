@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { ChevronLeft, ChevronRight } from "lucide-react"
+import Image from "next/image"
 
 const images = [
   "/hero-1.jpg",
@@ -29,16 +30,23 @@ export default function HeroSlideshow() {
     <div className="relative w-full h-[70vh] md:h-[90vh] overflow-hidden">
       {/* 輪播圖片 */}
       <AnimatePresence initial={false}>
-        <motion.img
+        <motion.div
           key={images[index]}
-          src={images[index]}
-          alt="Hero banner"
-          className="absolute inset-0 w-full h-full object-cover object-center rounded-none"
+          className="absolute inset-0 w-full h-full"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 1.2 }}
-        />
+        >
+          <Image
+            src={images[index]}
+            alt="Hero banner"
+            fill
+            className="object-cover object-center"
+            priority={index === 0}
+            quality={90}
+          />
+        </motion.div>
       </AnimatePresence>
 
       {/* 左右切換按鈕 */}

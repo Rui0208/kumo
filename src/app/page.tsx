@@ -1,12 +1,16 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import IntroScreen from "@/components/IntroScreen"
 import Hero from "@/sections/Hero"
-import { fadeIn } from "@/lib/animations"
 import { useClientSide } from "@/lib/hooks"
 import About from "@/sections/About"
+import Lookbook from "@/sections/Lookbook"
+import Products from "@/sections/Products"
+import Contact from "@/sections/Contact"
+import FollowUsPrompt from "@/components/FollowUsPrompt"
+import ScrollToTop from "@/components/ScrollToTop"
 
 export default function Home() {
   const [introCompleted, setIntroCompleted] = useState(false)
@@ -14,6 +18,8 @@ export default function Home() {
 
   const handleIntroComplete = () => {
     setIntroCompleted(true)
+    // intro 完成後滾動到頂部
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   // 在客戶端渲染之前顯示簡化的載入狀態
@@ -48,8 +54,13 @@ export default function Home() {
             className="min-h-screen"
             suppressHydrationWarning
           >
+            <FollowUsPrompt />
             <Hero />
             <About />
+            <Lookbook />
+            <Products />
+            <Contact />
+            <ScrollToTop />
           </motion.div>
         )}
       </AnimatePresence>

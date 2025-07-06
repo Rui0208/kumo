@@ -1,0 +1,42 @@
+{
+  "name": "kumoくも - 日系選品服飾",
+  "short_name": "kumoくも",
+  "description": "精選日系服飾，展現獨特品味與質感生活",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f3f4f4",
+  "theme_color": "#2c5530",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "zh-TW",
+  "dir": "ltr",
+  "categories": ["shopping", "fashion", "lifestyle"],
+  "icons": [
+    {
+      "src": "/hero-1.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "商品",
+      "short_name": "商品",
+      "description": "瀏覽所有商品",
+      "url": "/#products"
+    },
+    {
+      "name": "穿搭",
+      "short_name": "穿搭",
+      "description": "查看穿搭靈感",
+      "url": "/#lookbook"
+    },
+    {
+      "name": "聯絡",
+      "short_name": "聯絡",
+      "description": "聯絡我們",
+      "url": "/#contact"
+    }
+  ]
+} 
