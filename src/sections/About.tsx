@@ -8,7 +8,7 @@ export default function About() {
   const { scrollYProgress } = useScroll()
   
   // 圖片縮放效果：從 0.3 縮放到 0.8
-  const imageScale = useTransform(scrollYProgress, [0,0.2], [0.5, 1])
+  const imageScale = useTransform(scrollYProgress, [0,0.1], [0.6, 1])
 
   return (
     <section id="about" className="w-full min-h-screen relative overflow-hidden">

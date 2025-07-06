@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import IntroScreen from "@/components/IntroScreen"
 import Hero from "@/sections/Hero"
@@ -15,6 +15,13 @@ import ScrollToTop from "@/components/ScrollToTop"
 export default function Home() {
   const [introCompleted, setIntroCompleted] = useState(false)
   const isClient = useClientSide()
+
+  // 確保頁面加載時就滾動到頂部
+  useEffect(() => {
+    if (isClient) {
+      window.scrollTo(0, 0)
+    }
+  }, [isClient])
 
   const handleIntroComplete = () => {
     setIntroCompleted(true)
@@ -44,26 +51,28 @@ export default function Home() {
       {/* IntroScreen 進場動畫 */}
       <IntroScreen onComplete={handleIntroComplete} />
 
-      {/* 主頁內容 */}
-      <AnimatePresence>
-        {introCompleted && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, ease: "easeOut" }}
-            className="min-h-screen"
-            suppressHydrationWarning
-          >
-            <FollowUsPrompt />
-            <Hero />
-            <About />
-            <Lookbook />
-            <Products />
-            <Contact />
-            <ScrollToTop />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* 主頁內容 - 在intro期間隱藏 */}
+      <div className={introCompleted ? 'block' : 'hidden'}>
+        <AnimatePresence>
+          {introCompleted && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1, ease: "easeOut" }}
+              className="min-h-screen"
+              suppressHydrationWarning
+            >
+              <FollowUsPrompt />
+              <Hero />
+              <About />
+              <Lookbook />
+              <Products />
+              <Contact />
+              <ScrollToTop />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </main>
   )
 } 
