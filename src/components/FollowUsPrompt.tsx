@@ -1,17 +1,14 @@
 // FollowUsPrompt.tsx
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { X } from "lucide-react"
 
 export default function FollowUsPrompt() {
-  const [isVisible, setIsVisible] = useState(false)
+  const [isVisible, setIsVisible] = useState(true)
 
-  // 5秒後顯示提示
-  setTimeout(() => {
-    setIsVisible(true)
-  }, 5000)
+ 
 
   const handleClose = () => {
     setIsVisible(false)

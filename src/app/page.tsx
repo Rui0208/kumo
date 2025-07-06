@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import IntroScreen from "@/components/IntroScreen"
 import Hero from "@/sections/Hero"
@@ -15,11 +15,13 @@ import ScrollToTop from "@/components/ScrollToTop"
 export default function Home() {
   const [introCompleted, setIntroCompleted] = useState(false)
   const isClient = useClientSide()
+  const hasScrolledRef = useRef(false)
 
-  // 確保頁面加載時就滾動到頂部
+  // 確保頁面加載時就滾動到頂部 - 只執行一次
   useEffect(() => {
-    if (isClient) {
+    if (isClient && !hasScrolledRef.current) {
       window.scrollTo(0, 0)
+      hasScrolledRef.current = true
     }
   }, [isClient])
 
@@ -62,17 +64,23 @@ export default function Home() {
               className="min-h-screen"
               suppressHydrationWarning
             >
-              <FollowUsPrompt />
               <Hero />
               <About />
               <Lookbook />
               <Products />
               <Contact />
-              <ScrollToTop />
             </motion.div>
           )}
         </AnimatePresence>
       </div>
+
+      {/* 獨立的 UI 組件 - 不受主要內容動畫影響 */}
+      {introCompleted && (
+        <>
+          <FollowUsPrompt />
+          <ScrollToTop />
+        </>
+      )}
     </main>
   )
 } 

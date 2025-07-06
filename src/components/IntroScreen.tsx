@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { fadeIn, scaleIn } from "@/lib/animations"
 import { useClientSide } from "@/lib/hooks"
@@ -12,7 +12,34 @@ interface IntroScreenProps {
 export default function IntroScreen({ onComplete }: IntroScreenProps) {
   const [isVisible, setIsVisible] = useState(true)
   const isClient = useClientSide()
+  const hasCompletedRef = useRef(false)
 
+  useEffect(() => {
+    if (!isClient) return
+
+    const timer = setTimeout(() => {
+      setIsVisible(false)
+      setTimeout(() => {
+        // 恢復頁面滾動
+        document.body.style.overflow = 'auto'
+        document.body.style.height = 'auto'
+        // 確保只調用一次 onComplete
+        if (!hasCompletedRef.current) {
+          hasCompletedRef.current = true
+          onComplete()
+        }
+      }, 1000) // 等待淡出動畫完成後觸發 onComplete
+    }, 3000)
+
+    return () => {
+      clearTimeout(timer)
+      // 清理時恢復滾動
+      document.body.style.overflow = 'auto'
+      document.body.style.height = 'auto'
+    }
+  }, [onComplete, isClient])
+
+  // 單獨處理 body 樣式的 effect
   useEffect(() => {
     if (!isClient) return
 
@@ -25,23 +52,12 @@ export default function IntroScreen({ onComplete }: IntroScreenProps) {
       document.body.style.height = 'auto'
     }
 
-    const timer = setTimeout(() => {
-      setIsVisible(false)
-      setTimeout(() => {
-        // 恢復頁面滾動
-        document.body.style.overflow = 'auto'
-        document.body.style.height = 'auto'
-        onComplete()
-      }, 1000) // 等待淡出動畫完成後觸發 onComplete
-    }, 3000)
-
     return () => {
-      clearTimeout(timer)
       // 清理時恢復滾動
       document.body.style.overflow = 'auto'
       document.body.style.height = 'auto'
     }
-  }, [onComplete, isClient, isVisible])
+  }, [isVisible, isClient])
 
   // 在客戶端渲染之前不顯示任何內容，避免 hydration mismatch
   if (!isClient) {
