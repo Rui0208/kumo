@@ -49,7 +49,7 @@ export default function Products() {
           viewport={{ once: true, amount: 0.3 }}
           className="text-center mb-12 lg:mb-16"
         >
-          <h2 className="text-3xl lg:text-4xl font-light text-center mb-4 tracking-wider font-serif">
+          <h2 className="text-3xl lg:text-4xl text-gray-900 font-light text-center mb-4 tracking-wider font-serif">
             Products
           </h2>
           <p className="text-lg text-gray-600 font-light max-w-2xl mx-auto">
